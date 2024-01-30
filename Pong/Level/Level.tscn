@@ -1,0 +1,100 @@
+[gd_scene load_steps=9 format=3 uid="uid://cnn1twkgr00w1"]
+
+[ext_resource type="Script" path="res://Level/Level.gd" id="1_jadu7"]
+[ext_resource type="PackedScene" uid="uid://c0v2hq31ukwas" path="res://Player/Player.tscn" id="1_yhygh"]
+[ext_resource type="PackedScene" uid="uid://bwq0lgeqe6bx7" path="res://Opponent/Opponent.tscn" id="2_g82ue"]
+[ext_resource type="PackedScene" uid="uid://sp1smi4s85o1" path="res://Ball/Ball.tscn" id="3_qsgj6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gmjsw"]
+size = Vector2(1280.25, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lfe7c"]
+size = Vector2(10, 720)
+
+[sub_resource type="SystemFont" id="SystemFont_ygwy5"]
+font_names = PackedStringArray("Comic Sans MS")
+
+[sub_resource type="SystemFont" id="SystemFont_jl8nh"]
+font_names = PackedStringArray("Comic Sans MS")
+
+[node name="Level" type="Node"]
+script = ExtResource("1_jadu7")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.415686, 0.631373, 0.882353, 1)
+
+[node name="Player" parent="." instance=ExtResource("1_yhygh")]
+
+[node name="Opponent" parent="." instance=ExtResource("2_g82ue")]
+
+[node name="Ball" parent="." instance=ExtResource("3_qsgj6")]
+position = Vector2(640, 360)
+
+[node name="Walls" type="Node" parent="."]
+
+[node name="WallTop" type="StaticBody2D" parent="Walls"]
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/WallTop"]
+position = Vector2(640.125, -10)
+shape = SubResource("RectangleShape2D_gmjsw")
+
+[node name="WallDown" type="StaticBody2D" parent="Walls"]
+position = Vector2(0, 720)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/WallDown"]
+position = Vector2(640.125, 10)
+shape = SubResource("RectangleShape2D_gmjsw")
+
+[node name="Areas" type="Node" parent="."]
+
+[node name="Left" type="Area2D" parent="Areas"]
+position = Vector2(-13, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Areas/Left"]
+position = Vector2(5, 360)
+shape = SubResource("RectangleShape2D_lfe7c")
+
+[node name="Right" type="Area2D" parent="Areas"]
+position = Vector2(1283, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Areas/Right"]
+position = Vector2(5, 360)
+shape = SubResource("RectangleShape2D_lfe7c")
+
+[node name="PlayerScore" type="Label" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_right = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("SystemFont_ygwy5")
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OpponentScore" type="Label" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 100.0
+offset_right = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("SystemFont_jl8nh")
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="body_entered" from="Areas/Left" to="." method="_on_left_body_entered"]
+[connection signal="body_entered" from="Areas/Right" to="." method="_on_right_body_entered"]
